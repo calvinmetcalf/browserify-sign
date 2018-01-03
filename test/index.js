@@ -63,9 +63,15 @@ fixtures.valid.ec.forEach(function (f) {
   }
 
   test(f.message, function (t) {
-    var nSign = nCrypto.createSign(f.scheme)
+    var nSign
+    try {
+      nSign = nCrypto.createSign(f.scheme)
+    } catch (ex) {
+      console.info('skipping unsupported scheme', f.scheme)
+      t.end()
+      return
+    }
     var bSign = bCrypto.createSign(f.scheme)
-
     var bSig = bSign.update(message).sign(priv)
     var nSig = nSign.update(message).sign(priv)
     t.notEqual(bSig.toString('hex'), nSig.toString('hex'), 'not equal sigs')
