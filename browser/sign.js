@@ -7,6 +7,8 @@ var BN = require('bn.js')
 var parseKeys = require('parse-asn1')
 var curves = require('./curves.json')
 
+var RSA_PKCS1_PADDING = 1
+
 function sign (hash, key, hashType, signType, tag) {
   var priv = parseKeys(key)
   if (priv.curve) {
@@ -19,6 +21,7 @@ function sign (hash, key, hashType, signType, tag) {
   } else {
     if (signType !== 'rsa' && signType !== 'ecdsa/rsa') throw new Error('wrong private key type')
   }
+  if (key.padding !== undefined && key.padding !== RSA_PKCS1_PADDING) throw new Error('padding scheme not supported')
   hash = Buffer.concat([tag, hash])
   var len = priv.modulus.byteLength()
   var pad = [0, 1]
