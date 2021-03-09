@@ -5,8 +5,9 @@ node_js:
   - "10"
   - "12"
   - "14"
+  - "15"
   - lts/*
-  - current
+  - node
 matrix:
   include:
     - node_js: "12"
